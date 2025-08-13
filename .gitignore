@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+
+# local env files
+.env*
+**/.env
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Android / Gradle
+.gradle/
+.idea/
+*.iml
+build/
+app/build/
+
+# Docker
+**/vendor/
+
+# Logs
+*.log
+
