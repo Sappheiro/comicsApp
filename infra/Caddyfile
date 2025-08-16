@@ -1,20 +1,21 @@
 {
-  auto_https off      # Dev only: disable HTTPS. In prod, Caddy gets certs automatically.
+  auto_https off      # Dev only: In prod, Caddy gets certs automatically.
 }
 
 :8080 {
   # quick health page at root
   respond / "yourcomics caddy up" 200
 
-  # future API path; we’ll point this to the Node server soon
+  # Caddy runs in a container; talk to the host’s Node server:
   handle_path /api* {
-    reverse_proxy 127.0.0.1:3000
+    reverse_proxy host.docker.internal:3000
   }
 
   # proxy MinIO API through Caddy so everything is under one front door
+  # Talk directly to the MinIO service on the compose network:
   @minio path /minio* /api/minio* /s3*
   handle @minio {
-    reverse_proxy 127.0.0.1:${MINIO_API_PORT}
+    reverse_proxy minio:${MINIO_API_PORT}  
   }
 
   log {
